@@ -1,6 +1,7 @@
 package com.cg.controller;
 
 import com.cg.entity.*;
+import com.cg.serviceImpl.BattleServiceImpl;
 import com.cg.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,9 @@ import java.util.List;
 public class mainController {
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private BattleServiceImpl service;
+
     @GetMapping("/toLogin")
     public String toLogin(){
         return "login/login";
@@ -43,7 +47,9 @@ public class mainController {
         return "main/main";
     }
     @GetMapping("/main/manageVote")
-    public String manageVote(){
+    public String manageVote(Model model){
+        List<BattleTall> list = service.getAllBattleInfo();
+        model.addAttribute("battleList",list);
         return "main/manageVote";
     }
     @GetMapping("/main/toAddJudge")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>Layui</title>
@@ -16,6 +16,7 @@
 
 <table class="layui-table" lay-skin="line">
     <colgroup>
+        <col width="100">
         <col width="150">
         <col width="150">
         <col width="150">
@@ -27,6 +28,7 @@
     </colgroup>
     <thead>
     <tr>
+        <th>序号</th>
         <th>歌手A</th>
         <th>歌曲A</th>
         <th>歌手A得票</th>
@@ -37,17 +39,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>贤心</td>
-        <td>汉族</td>
-        <td>1989-10-14</td>
-        <td>人生似修行</td>
-        <td>人生似修行</td>
-        <td>人生似修行</td>
-        <td>
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">开启</button>
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-warm">暂停</button>
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">关闭</button>
+    <tr th:each="item:${battleList}">
+        <td th:text="${item.getBattleId()}"></td>
+        <td th:text="${item.getPlayerNameA()}"></td>
+        <td th:text="${item.getSongA()}"></td>
+        <td th:text="${item.getPollA()}"></td>
+        <td th:text="${item.getPlayerNameB()}"></td>
+        <td th:text="${item.getSongB()}"> </td>
+        <td th:text="${item.getPollB()}"></td>
+        <td >
+            <p th:if="${item.getStatus()==0}">已开启</p>
+            <p th:if="${item.getStatus()==1}">已暂停</p>
+            <p th:if="${item.getStatus()==2}">已关闭</p>
+            <a type="button" class="layui-btn layui-btn-sm layui-btn-normal" th:href="@{/battle/updateStatus/0/}+${item.BattleId}" >开启</a>
+            <a type="button" class="layui-btn layui-btn-sm layui-btn-warm" th:href="@{/battle/updateStatus/1/}+${item.BattleId}" >暂停</a>
+            <a type="button" class="layui-btn layui-btn-sm layui-btn-danger" th:href="@{/battle/updateStatus/2/}+${item.BattleId}">关闭</a>
         </td>
     </tr>
     </tbody>

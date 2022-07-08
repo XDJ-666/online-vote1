@@ -41,6 +41,10 @@
     <select id="getAllPlayer" resultType="Player">
         select * from player
     </select>
+    <!--根据ID查询选手-->
+    <select id="getPlayerById" resultType="Player" parameterType="int">
+        select * from player where playerId = #{playerId}
+    </select>
     <!--获取所有评委信息-->
     <select id="getAllJudge" resultType="Judge">
         select * from judge

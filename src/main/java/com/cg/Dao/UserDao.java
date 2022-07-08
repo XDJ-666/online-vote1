@@ -81,6 +81,12 @@ public interface UserDao {
    List<Player> getAllPlayer();
 
     /**
+     * 根据ID查询选手
+     * @param playerId
+     * @return
+     */
+    Player getPlayerById(int playerId);
+    /**
      * 获取所有评委信息
      * @return
      */
