@@ -20,12 +20,11 @@
       <li class="layui-nav-item layui-hide layui-show-md-inline-block">
         <a href="javascript:;">
           <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
-          管理员名称
+          <span th:text="${account}"></span>
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="">Your Profile</a></dd>
           <dd><a href="">Settings</a></dd>
-          <dd><a href="">退出登录</a></dd>
+          <dd><a th:href="@{/loginout}">退出登录</a></dd>
         </dl>
       </li>
       <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -55,7 +54,6 @@
         <li class="layui-nav-item layui-nav-itemed" value="4">
           <a href="javascript:;" class="five" >比赛成绩</a>
         </li>
-
 
       </ul>
     </div>
@@ -136,7 +134,7 @@
         break;
       case 4:
         $(".five").addClass("five_c");
-        document.getElementById("iframe_0").src="../../cigarette/page/profit/list.html";
+        document.getElementById("iframe_0").src="main/totalScore";
         break;
       default:
         break;

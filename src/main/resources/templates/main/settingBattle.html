@@ -52,7 +52,16 @@
           </p>
         </select>
       </div>
-    </div>
+    </div><br>
+      <div class="layui-inline" style="margin-top: 20px">
+      <label class="layui-form-label">比赛类型</label>
+      <div class="layui-input-inline">
+          <select lay-verify="required" lay-search="" name="type">
+              <option  th:value="初赛">初赛</option>
+              <option  th:value="决赛">决赛</option>
+          </select>
+      </div>
+      </div>
   </div>
 
   <div class="layui-form-item">

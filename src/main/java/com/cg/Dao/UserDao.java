@@ -1,9 +1,6 @@
 package com.cg.Dao;
 
-import com.cg.entity.Admin;
-import com.cg.entity.Audience;
-import com.cg.entity.Judge;
-import com.cg.entity.Player;
+import com.cg.entity.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -86,9 +83,18 @@ public interface UserDao {
      * @return
      */
     Player getPlayerById(int playerId);
+
+    /**
+     *
+     * @param playerId
+     * @return
+     */
+    Battle_Player getBattlePlayerById(int playerId);
     /**
      * 获取所有评委信息
      * @return
      */
    List<Judge> getAllJudge();
+
+
 }

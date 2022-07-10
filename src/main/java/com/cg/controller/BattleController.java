@@ -1,18 +1,19 @@
 package com.cg.controller;
 
 import com.cg.Dao.BattleDao;
-import com.cg.Dao.UserDao;
-import com.cg.entity.Battle;
+import com.cg.entity.*;
 import com.cg.serviceImpl.BattleServiceImpl;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+
 
 @Controller
 public class BattleController {
@@ -31,7 +32,7 @@ public class BattleController {
      * @return
      */
     @PostMapping("/battle/addBattle")
-    public String inserBattleInfo(String playerA,String playerB,String judgeId, Model model,String songA,String songB){
+    public String inserBattleInfo(String playerA,String playerB,String judgeId, Model model,String songA,String songB,String type){
         int flag = 0;//标识
         Battle battle = new Battle();
         battle.setPlayerA(Integer.valueOf(playerA));
@@ -39,6 +40,7 @@ public class BattleController {
         battle.setJudgeId(Integer.valueOf(judgeId));
         battle.setSongA(songA);
         battle.setSongB(songB);
+        battle.setType(type);
         System.out.println(battle);
         if(battle.getPlayerA()== battle.getPlayerB()){
             flag = 1;
@@ -49,6 +51,13 @@ public class BattleController {
         }
         return"main/settingBattle";
     }
+
+    /**
+     * 设置通道状态
+     * @param flag
+     * @param Id
+     * @return
+     */
     @GetMapping("/battle/updateStatus/{flag}/{Id}")
     public String updateStatus(@PathVariable String flag, @PathVariable String Id){
         int battleId =Integer.parseInt(Id) ;
@@ -70,9 +79,39 @@ public class BattleController {
         }else if("2".equals(flag)){
             int status = 2;
             battle.setStatus(status);
-//            int tag = service.updateStatus(battle);
             battleDao.updateStatus(battle);
         }
         return"main/manageVote";
+    }
+    @GetMapping("/poll/addPoll/{tag}/{battleid}/{PlayerId}")
+    public String addPoll(HttpSession session, Model model, @PathVariable String tag, @PathVariable String battleid, @PathVariable String PlayerId){
+        int resultType = 0;
+        Battle battle = new Battle();
+        //1.获取数据
+        int playerId= Integer.parseInt(PlayerId);
+        int battleId = Integer.parseInt(battleid);
+        int tag1 = Integer.parseInt(tag);
+        Object audId = session.getAttribute("audId");
+        int audId1= Integer.parseInt(audId==null?"":audId.toString());//观众ID
+        Vote vote = new Vote();
+        vote.setBattleId(battleId);
+        vote.setAudId(audId1);
+        vote.setPlayerId(playerId);
+        //2.判断是否已经投票
+        int count = service.isVote(vote);
+        //3.对战
+        if(count==0){
+            battle.setBattleId(battleId);
+            service.updatePoll(battle,tag1);
+            service.addPoll(vote);
+//            System.out.println("投的"+tag1);
+            resultType=0;
+        }else{
+            resultType = 1;
+        }
+        List<Battle_Player> list = service.getGamePlayerInfo();
+        model.addAttribute("players",list);
+        model.addAttribute("resultType",resultType);
+      return "main/vote";
     }
 }

@@ -13,14 +13,14 @@ public class BattleTall {
     private String songB;
     private int playerA;
     private int playerB;
-    private double scoreA;
-    private double scoreB;
-    private double totalA;
-    private double totalB;
+    private float scoreA;
+    private float scoreB;
+    private float totalA;
+    private float totalB;
     private int judgeId;
     private int pollA;
     private int pollB;
     private int status;
     private int winner;
-
+    private String type;
 }

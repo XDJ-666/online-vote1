@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
+@SessionAttributes("path")
 public class PlayerController {
     @Autowired
     private UserServiceImpl service;
@@ -31,9 +33,10 @@ public class PlayerController {
      */
     @ResponseBody
     @PostMapping("/main/doAddPlayer")
-    public MsgResult addPlayer(MultipartFile myfile, HttpServletRequest request,String phone,String playerName){
+    public MsgResult addPlayer(MultipartFile myfile, HttpServletRequest request,String phone,String playerName,Model model){
     //指定文件上传到服务器的位置（/uploadfiles）
         String realPath = "D://IDEA-Work/online-vote/src/main/resources/static/images";
+        model.addAttribute("path",realPath);
         System.out.println(realPath);
     //为上传到服务器的文件取名，使用UUID防止文件名重复
         String filename= UUID.randomUUID().toString()+"-"+myfile.getOriginalFilename();

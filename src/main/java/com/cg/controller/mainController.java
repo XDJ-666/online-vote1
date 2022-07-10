@@ -3,15 +3,20 @@ package com.cg.controller;
 import com.cg.entity.*;
 import com.cg.serviceImpl.BattleServiceImpl;
 import com.cg.serviceImpl.UserServiceImpl;
+import com.sun.deploy.util.SessionState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
+@SessionAttributes({"judgeId","audId","adId"})
 public class mainController {
     @Autowired
     private UserServiceImpl userService;
@@ -22,18 +27,27 @@ public class mainController {
     public String toLogin(){
         return "login/login";
     }
+
     @GetMapping("/toRegister")
     public String toRegister(){
         return "register/register";
     }
+
     @GetMapping("/main/manager")
     public String toManager(){
         return"main/manager";
     }
+
     @GetMapping("/main/addPlayer")
     public String toAddPlayer(){
         return "main/addPlayer";
     }
+
+    /**
+     * 设置比赛信息
+     * @param model
+     * @return
+     */
     @GetMapping("/main/setBattle")
     public String toSetBattle(Model model){
         List<Player> list = userService.getAllPlayer();
@@ -42,20 +56,45 @@ public class mainController {
         model.addAttribute("judges",judges);
         return "main/settingBattle";
     }
+
     @GetMapping("/main/main")
     public String main(){
         return "main/main";
     }
+
+    /**
+     * 获取比赛信息并跳转
+     * @param model
+     * @return
+     */
     @GetMapping("/main/manageVote")
     public String manageVote(Model model){
         List<BattleTall> list = service.getAllBattleInfo();
         model.addAttribute("battleList",list);
         return "main/manageVote";
     }
+
+    /**
+     * 获取成绩信息
+     * @return
+     */
+    @GetMapping("/main/totalScore")
+    public String showScore(Model model){
+        List<BattleTall> list = service.getTotalScore();
+        model.addAttribute("scores",list);
+        return "main/totalScore";
+    }
     @GetMapping("/main/toAddJudge")
     public String toAddJudge(){
         return "main/addJudge";
     }
+
+    /**
+     * 观众注册
+     * @param audience
+     * @param model
+     * @return
+     */
     @PostMapping("/doRegister")
     public String Register(Audience audience, Model model){
        int flag = userService.selectAudienceByPhone(audience.getPhone());
@@ -67,6 +106,15 @@ public class mainController {
            return "register/register";
        }
     }
+
+    /**
+     * 登录
+     * @param userName
+     * @param password
+     * @param tag
+     * @param model
+     * @return
+     */
     @PostMapping("/doLogin")
     public String Login(String userName,String password,String tag,Model model){
         int flag=0;
@@ -77,6 +125,11 @@ public class mainController {
             audience.setPassword(password);
            Audience result = userService.selectAudience(audience);
            if(result!=null){
+               //选手信息
+               List<Battle_Player> list = service.getGamePlayerInfo();
+               int audId = result.getAudId();
+               model.addAttribute("audId",audId);
+               model.addAttribute("players",list);
                return "main/vote";
            }else{
                flag = 1;
@@ -89,7 +142,10 @@ public class mainController {
             admin.setAccount(userName);
             admin.setPassword(password);
             Admin result = userService.selectAdmin(admin);
+            model.addAttribute("account",userName);
             if(result!=null){
+                int adId = result.getAdId();
+                model.addAttribute("adId",adId);
                 int scale = result.getScale();
                 if(scale==0){
                     return "main/manager";
@@ -107,6 +163,11 @@ public class mainController {
             judge.setPassword(password);
             Judge result = userService.selectJudge(judge);
             if(result!=null){
+                int judgeId = result.getJudgeId();
+                System.out.println("maincontroller"+judgeId);
+                List<Battle_Player> list = service.getGamePlayerInfo();
+                model.addAttribute("judgeId",judgeId);
+                model.addAttribute("players",list);
                 return "main/judge";
             }else{
                 flag = 1;
@@ -114,6 +175,11 @@ public class mainController {
                 return "login/login";
             }
         }
+        return "login/login";
+    }
+    @GetMapping("/loginout")
+    public String logOut(SessionStatus status){
+        status.setComplete();
         return "login/login";
     }
 }

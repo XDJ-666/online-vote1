@@ -45,6 +45,9 @@
     <select id="getPlayerById" resultType="Player" parameterType="int">
         select * from player where playerId = #{playerId}
     </select>
+    <select id="getBattlePlayerById" resultType="Battle_Player" parameterType="int">
+        select * from player where playerId = #{playerId}
+    </select>
     <!--获取所有评委信息-->
     <select id="getAllJudge" resultType="Judge">
         select * from judge
