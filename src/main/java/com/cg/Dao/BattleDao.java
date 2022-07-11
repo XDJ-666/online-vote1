@@ -3,6 +3,7 @@ package com.cg.Dao;
 import com.cg.entity.Battle;
 import com.cg.entity.BattleTall;
 import com.cg.entity.Vote;
+import com.cg.entity.Winner;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public interface BattleDao {
      */
     int updateWinner(Battle battle);
 
+    /**
+     * 修改胜者评分
+     * @param winner
+     * @return
+     */
+    int updateWinnerScore(Winner winner);
     /**
      * 获取正在比赛的选手信息
      * @return
@@ -74,4 +81,16 @@ public interface BattleDao {
      * @return
      */
     int isVote(Vote vote);
+
+    /**
+     * 获取结束比赛的信息
+     * @return
+     */
+    Battle getEndingPlayer();
+
+    /**
+     * 获取胜利者信息
+     * @return
+     */
+    List<Winner> getWinnerInfo();
 }

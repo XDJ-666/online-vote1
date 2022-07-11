@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -83,6 +82,16 @@ public class BattleController {
         }
         return"main/manageVote";
     }
+
+    /**
+     * 投票
+     * @param session
+     * @param model
+     * @param tag
+     * @param battleid
+     * @param PlayerId
+     * @return
+     */
     @GetMapping("/poll/addPoll/{tag}/{battleid}/{PlayerId}")
     public String addPoll(HttpSession session, Model model, @PathVariable String tag, @PathVariable String battleid, @PathVariable String PlayerId){
         int resultType = 0;
@@ -114,4 +123,40 @@ public class BattleController {
         model.addAttribute("resultType",resultType);
       return "main/vote";
     }
+
+    /**
+     * 大屏显示
+     * @param model
+     * @return
+     */
+    @GetMapping("/showResult")
+    public String show(Model model){
+        List<Battle_Player> list = service.getShowPlayerInfo();
+        if(list==null){
+            return "main/errResult";
+        }else {
+            model.addAttribute("players", list);
+            return "main/result";
+        }
+    }
+    @GetMapping("/endResult")
+    public String result(Model model){
+        List<BattleTall> battleTalls = battleDao.getAllBattleInfo();
+        int flag = 0;
+        for (BattleTall battle:battleTalls) {
+            if(battle.getStatus()==0){
+                flag = 1;
+            }
+        }
+        if(flag == 0){
+            List<Winner> list = service.getWinnerInfo();
+            model.addAttribute("players", list);
+            return "main/sucessScore";
+        }else{
+            return "main/errResult2";
+        }
+
+
+    }
+
 }

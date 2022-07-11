@@ -129,6 +129,7 @@ public class mainController {
                List<Battle_Player> list = service.getGamePlayerInfo();
                int audId = result.getAudId();
                model.addAttribute("audId",audId);
+               System.out.println("audId:"+audId);
                model.addAttribute("players",list);
                return "main/vote";
            }else{
@@ -166,9 +167,14 @@ public class mainController {
                 int judgeId = result.getJudgeId();
                 System.out.println("maincontroller"+judgeId);
                 List<Battle_Player> list = service.getGamePlayerInfo();
-                model.addAttribute("judgeId",judgeId);
-                model.addAttribute("players",list);
-                return "main/judge";
+                if(list==null){
+                    return "main/errResult";
+                }else {
+                    model.addAttribute("judgeId",judgeId);
+                    model.addAttribute("players",list);
+                    return "main/judge";
+                }
+
             }else{
                 flag = 1;
                 model.addAttribute("flag",flag);

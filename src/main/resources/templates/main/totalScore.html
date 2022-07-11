@@ -50,7 +50,7 @@
         </span>
     </td>
     <td th:text="${item.getSongA()}"></td>
-    <td th:text="${item.getScoreA()}"></td>
+    <td th:text="${item.getTotalA()}"></td>
     <td >
         <span th:text="${item.getPlayerNameB()}"></span>
         <span type="hidden" th:if="${item.getWinner()==item.getPlayerB()}">
@@ -59,7 +59,7 @@
 
     </td>
     <td th:text="${item.getSongB()}"> </td>
-    <td th:text="${item.getScoreB()}"></td>
+    <td th:text="${item.getTotalB()}"></td>
 
   </tr>
   </tbody>

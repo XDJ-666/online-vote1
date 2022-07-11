@@ -10,5 +10,11 @@ public class Battle_Player {
     private String phone;
     private String playerName;
     private String image;
+    private float scoreA;
+    private float scoreB;
+    private float totalA;
+    private float totalB;
+    private int pollA;
+    private int pollB;
 
 }

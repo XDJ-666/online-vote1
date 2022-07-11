@@ -60,4 +60,16 @@ public interface BattleService {
      */
     int addPoll(Vote vote);
 
+    /**
+     * 获取正在比赛的选手信息
+     * @return
+     */
+    List<Battle_Player> getShowPlayerInfo();
+
+    /**
+     * 获取胜利者信息
+     * @return
+     */
+    List<Winner> getWinnerInfo();
+
 }

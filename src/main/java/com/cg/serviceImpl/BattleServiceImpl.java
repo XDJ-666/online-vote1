@@ -53,6 +53,7 @@ public class BattleServiceImpl implements BattleService {
     public List<BattleTall> getTotalScore() {
         List<BattleTall> list = battleDao.getAllBattleInfo();
         Battle battle2 = new Battle();
+        Winner winner =new Winner();
         for (BattleTall battle: list) {
             //1.获取选手姓名
             Player playerA = userDao.getPlayerById(battle.getPlayerA());
@@ -77,16 +78,23 @@ public class BattleServiceImpl implements BattleService {
                 float partB =Float.parseFloat(df.format(partb)) ;//保留一位小数
                 totalA = scoreA+partA;
                 totalB = scoreB+partB;
+                battle2.setTotalA(totalA);
+                battle2.setTotalB(totalB);
+                winner.setBattleId(battle.getBattleId());
                 if(totalA>totalB){
                     battle.setWinner(battle.getPlayerA());
                     battle2.setBattleId(battle.getBattleId());
                     battle2.setWinner(battle.getPlayerA());
+                    winner.setWinnerScore(totalA);
+                    battleDao.updateWinnerScore(winner);
                     battleDao.updateWinner(battle2);
                     System.out.println("A获胜");
                 }else{
                     battle.setWinner(battle.getPlayerB());
                     battle2.setBattleId(battle.getBattleId());
                     battle2.setWinner(battle.getPlayerB());
+                    winner.setWinnerScore(totalB);
+                    battleDao.updateWinnerScore(winner);
                     battleDao.updateWinner(battle2);
                     System.out.println("B获胜");
                 }
@@ -192,5 +200,58 @@ public class BattleServiceImpl implements BattleService {
         battleDao.addPoll(vote);
         return 0;
     }
+
+    /**
+     * 大屏显示
+     * @return
+     */
+    @Override
+    public List<Battle_Player> getShowPlayerInfo() {
+        //1.获取正在比赛的选手ID
+        Battle battle  = battleDao.getPlayerByStatus();
+        int playera = battle.getPlayerA();
+        int playerb = battle.getPlayerB();
+        int battleid = battle.getBattleId();
+        Battle_Player playerA =userDao.getBattlePlayerById(playera);
+        playerA.setBattleId(battleid);
+        playerA.setScoreA(battle.getScoreA());
+        playerA.setPollA(battle.getPollA());
+        Battle_Player playerB =userDao.getBattlePlayerById(playerb);
+        playerB.setBattleId(battleid);
+        playerB.setScoreB(battle.getScoreB());
+        playerB.setPollB(battle.getPollB());
+        List<Battle_Player> list = new ArrayList<Battle_Player>();
+        list.add(playerA);
+        list.add(playerB);
+        for (Battle_Player player:list) {
+            System.out.println(player);
+        }
+        System.out.println();
+        return list;
+    }
+
+    /**
+     * 获取胜利者信息
+     * @return
+     */
+    @Override
+    public List<Winner> getWinnerInfo() {
+        List<Winner> winnerList= battleDao.getWinnerInfo();
+        List<Winner> result = new ArrayList<>();
+        List<BattleTall> battleList = battleDao.getAllBattleInfo();
+        for (BattleTall battle:battleList) {
+            for (Winner winner:winnerList) {
+                if(winner.getBattleId()==battle.getBattleId()){
+                    Player player =  userDao.getPlayerById(winner.getWinner());//获取胜者名称
+                    winner.setPlayerName(player.getPlayerName());
+                }
+                if(result.size()<8){
+                    result.add(winner);
+                }
+            }
+        }
+        return result;
+    }
+
 
 }

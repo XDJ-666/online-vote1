@@ -20,10 +20,13 @@ public class AudienceLoginInterceptor implements HandlerInterceptor {
             HttpSession session = request.getSession();
             //统一拦截（查询当前session是否存在user）(这里user会在每次登录成功后，写入session)
             Object user = session.getAttribute("audId");
+            System.out.println("111:"+user);
             if (user != null) {
                 return true;
+            }else{
+                response.sendRedirect(request.getContextPath() + "/toLogin");
             }
-            response.sendRedirect(request.getContextPath() + "/toLogin");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
