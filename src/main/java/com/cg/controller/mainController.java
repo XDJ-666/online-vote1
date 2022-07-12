@@ -129,9 +129,15 @@ public class mainController {
                List<Battle_Player> list = service.getGamePlayerInfo();
                int audId = result.getAudId();
                model.addAttribute("audId",audId);
-               System.out.println("audId:"+audId);
                model.addAttribute("players",list);
-               return "main/vote";
+               if (list == null) {
+                   return "main/errResult";
+               }else{
+                   return "main/vote";
+               }
+//               System.out.println("audId:"+audId);
+
+
            }else{
                flag = 1;
                model.addAttribute("flag",flag);
@@ -147,12 +153,7 @@ public class mainController {
             if(result!=null){
                 int adId = result.getAdId();
                 model.addAttribute("adId",adId);
-                int scale = result.getScale();
-                if(scale==0){
-                    return "main/manager";
-                }else{
-                    return "main/manageSys";
-                }
+                return "main/manager";
             }else{
                 flag = 1;
                 model.addAttribute("flag",flag);

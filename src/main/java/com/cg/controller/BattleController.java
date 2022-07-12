@@ -144,7 +144,7 @@ public class BattleController {
         List<BattleTall> battleTalls = battleDao.getAllBattleInfo();
         int flag = 0;
         for (BattleTall battle:battleTalls) {
-            if(battle.getStatus()==0){
+            if(battle.getStatus()!=2){
                 flag = 1;
             }
         }

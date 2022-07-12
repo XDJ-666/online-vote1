@@ -129,21 +129,27 @@ public class BattleServiceImpl implements BattleService {
     public List<Battle_Player> getGamePlayerInfo() {
         //1.获取正在比赛的选手ID
         Battle battle  = battleDao.getPlayerByStatus();
-        int playera = battle.getPlayerA();
-        int playerb = battle.getPlayerB();
-        int battleid = battle.getBattleId();
-        Battle_Player playerA =userDao.getBattlePlayerById(playera);
-        playerA.setBattleId(battleid);
-        Battle_Player playerB =userDao.getBattlePlayerById(playerb);
-        playerB.setBattleId(battleid);
-        List<Battle_Player> list = new ArrayList<Battle_Player>();
-        list.add(playerA);
-        list.add(playerB);
-        for (Battle_Player player:list) {
-            System.out.println(player);
+        if(battle==null){
+            return  null;
+        }else{
+            int playera = battle.getPlayerA();
+            int playerb = battle.getPlayerB();
+            int battleid = battle.getBattleId();
+            Battle_Player playerA =userDao.getBattlePlayerById(playera);
+            playerA.setBattleId(battleid);
+            Battle_Player playerB =userDao.getBattlePlayerById(playerb);
+            playerB.setBattleId(battleid);
+            List<Battle_Player> list = new ArrayList<Battle_Player>();
+            list.add(playerA);
+            list.add(playerB);
+            for (Battle_Player player:list) {
+                System.out.println(player);
+            }
+            System.out.println();
+            return list;
+
         }
-        System.out.println();
-        return list;
+
     }
 
     @Override
@@ -209,25 +215,26 @@ public class BattleServiceImpl implements BattleService {
     public List<Battle_Player> getShowPlayerInfo() {
         //1.获取正在比赛的选手ID
         Battle battle  = battleDao.getPlayerByStatus();
-        int playera = battle.getPlayerA();
-        int playerb = battle.getPlayerB();
-        int battleid = battle.getBattleId();
-        Battle_Player playerA =userDao.getBattlePlayerById(playera);
-        playerA.setBattleId(battleid);
-        playerA.setScoreA(battle.getScoreA());
-        playerA.setPollA(battle.getPollA());
-        Battle_Player playerB =userDao.getBattlePlayerById(playerb);
-        playerB.setBattleId(battleid);
-        playerB.setScoreB(battle.getScoreB());
-        playerB.setPollB(battle.getPollB());
-        List<Battle_Player> list = new ArrayList<Battle_Player>();
-        list.add(playerA);
-        list.add(playerB);
-        for (Battle_Player player:list) {
-            System.out.println(player);
+        if(battle==null){
+            return null;
+        }else{
+            int playera = battle.getPlayerA();
+            int playerb = battle.getPlayerB();
+            int battleid = battle.getBattleId();
+            Battle_Player playerA =userDao.getBattlePlayerById(playera);
+            playerA.setBattleId(battleid);
+            playerA.setScoreA(battle.getScoreA());
+            playerA.setPollA(battle.getPollA());
+            Battle_Player playerB =userDao.getBattlePlayerById(playerb);
+            playerB.setBattleId(battleid);
+            playerB.setScoreB(battle.getScoreB());
+            playerB.setPollB(battle.getPollB());
+            List<Battle_Player> list = new ArrayList<Battle_Player>();
+            list.add(playerA);
+            list.add(playerB);
+            return list;
         }
-        System.out.println();
-        return list;
+
     }
 
     /**
